@@ -14,9 +14,8 @@ public class ProjectServiceImpl implements ProjectService {
     public static final String STUDENT_NAME = "Aleksey";
     public static final String PROJECT_NAME = "Рецепты";
     public static final String START_VALUE = "Приложение запущено!";
-    public static final Calendar CALENDAR = new GregorianCalendar(2023, 1 , 2);
 
-    public static final String DATE = CALENDAR.getTime().toString();
+    public static final String DATE = LocalDate.of(2023,2,3).toString();
     public static final String DESCRIPTION = "Рецепты содержат в себе следующую информацию:\n" +
             " - описание приготовляемого блюда;\n" +
             " - ингредиенты для данного блюда;\n" +
