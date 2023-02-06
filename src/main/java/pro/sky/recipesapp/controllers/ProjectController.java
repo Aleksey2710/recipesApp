@@ -9,7 +9,7 @@ import pro.sky.recipesapp.services.ProjectService;
 import java.io.FileNotFoundException;
 
 @RestController
-@RequestMapping("/recipes")
+@RequestMapping("/project")
 public class ProjectController {
     private final ProjectService projectService;
 

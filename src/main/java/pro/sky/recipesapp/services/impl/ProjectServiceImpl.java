@@ -13,11 +13,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     public static final String STUDENT_NAME = "Aleksey";
     public static final String PROJECT_NAME = "Рецепты";
-    public static final String START_VALUE = "Приложение запущено!";
+    public static final String START_VALUE = "<h1 style=\"text-align: center\">Приложение запущено!</h1>";
 
     public static final String DATE = LocalDate.of(2023, 2, 3).toString();
 
-//    public static final String DESCRIPTION = ;
             /*"Рецепты содержат в себе следующую информацию:\n" +
             " - описание приготовляемого блюда;\n" +
             " - ингредиенты для данного блюда;\n" +
@@ -26,11 +25,11 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Override
-    public String getInfoProject() throws FileNotFoundException {
-        return "Имя студента: " + STUDENT_NAME + "\n" +
-                "Название проекта: " + PROJECT_NAME + "\n" +
-                "Дата создания: " + DATE + "\n" +
-                "Описание проекта: " + getProjectDescription();
+    public String getInfoProject() {
+        return "Имя студента: " + STUDENT_NAME + "</br>" +
+                "Название проекта: " + PROJECT_NAME + "</br>" +
+                "Дата создания: " + DATE + "</br>" +
+                "Описание проекта: </br>" + getProjectDescription();
     }
 
     @Override
@@ -39,19 +38,25 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public String getProjectDescription() throws FileNotFoundException {
+    public String getProjectDescription() {
         String separator = File.separator;
         String path = "C:" + separator + "Users" + separator + "User" + separator +
                 "IdeaProjects" + separator + "RecipesApp" + separator + "src" + separator + "main"
                 + separator + "java" + separator + "pro" + separator + "sky" + separator + "recipesapp"
                 + separator + "ReadMe.md";
-        File file = new File(path);
-        Scanner scanner = new Scanner(file);
-        String s = "";
-        while (scanner.hasNextLine()) {
-            s += scanner.nextLine();
+        return readFile(path);
+    }
+
+    private static String readFile(String nameFile) {
+        File file = new File(nameFile);
+        try (Scanner scanner = new Scanner(file)) {
+            String s = "";
+            while (scanner.hasNextLine()) {
+                s += scanner.nextLine();
+            }
+            return s;
+        } catch (FileNotFoundException e) {
+            return "Файл не найден!";
         }
-        scanner.close();
-        return s;
     }
 }
