@@ -8,7 +8,7 @@ import pro.sky.recipesapp.services.RecipeService;
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
-    private RecipeService recipeService;
+    private final RecipeService recipeService;
 
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;

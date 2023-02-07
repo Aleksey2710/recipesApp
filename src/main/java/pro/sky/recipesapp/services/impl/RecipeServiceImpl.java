@@ -22,11 +22,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe getRecipeById(long idRecipe) {
-        try {
             return recipeMap.get(idRecipe);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException();
-        }
     }
 
 }
