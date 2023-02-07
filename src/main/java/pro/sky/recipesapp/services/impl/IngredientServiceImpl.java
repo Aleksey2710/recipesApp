@@ -9,15 +9,15 @@ import java.util.TreeMap;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
-    private long idIngredient = 1L;
+    private static long idIngredient = 1L;
 
     private static Map<Long, Ingredient> ingredientMap = new TreeMap<>();
 
 
     @Override
-    public void addNewIngredient(Ingredient ingredient) {
-        ingredientMap.getOrDefault(idIngredient++, ingredient);
-
+    public long addNewIngredient(Ingredient ingredient) {
+        ingredientMap.getOrDefault(idIngredient, ingredient);
+        return idIngredient++;
     }
 
     @Override

@@ -4,7 +4,7 @@ import pro.sky.recipesapp.model.Recipe;
 
 public interface RecipeService {
 
-    void addNewRecipe(Recipe recipe);
+    long addNewRecipe(Recipe recipe);
 
     Recipe getRecipeById(long idRecipe);
 }
