@@ -1,12 +1,15 @@
 package pro.sky.recipesapp.model;
-/**
- * Описание рецептов.
- */
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
+
+/**
+ * Описание рецептов.
+ */
+
 @Data
 @AllArgsConstructor
 public class Recipe {
