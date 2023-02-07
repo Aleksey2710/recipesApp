@@ -14,14 +14,14 @@ import java.util.TreeMap;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
-    private static long idIngredient = 1L;
+    private long idIngredient = 1L;
 
-    private static Map<Long, Ingredient> ingredientMap = new TreeMap<>();
+    private static final Map<Long, Ingredient> ingredientMap = new TreeMap<>();
 
 
     @Override
     public long addNewIngredient(Ingredient ingredient) { //Создаем новый ингредиент.
-        ingredientMap.getOrDefault(idIngredient, ingredient);
+        ingredientMap.put(idIngredient, ingredient);
         return idIngredient++;
     }
 

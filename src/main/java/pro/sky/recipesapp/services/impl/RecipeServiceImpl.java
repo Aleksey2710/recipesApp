@@ -14,14 +14,14 @@ import java.util.TreeMap;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
-    private static long idRecipe = 1L;
+    private long idRecipe = 1L;
 
-    private static Map<Long, Recipe> recipeMap = new TreeMap<>();
+    private static final Map<Long, Recipe> recipeMap = new TreeMap<>();
 
 
     @Override
     public long addNewRecipe(Recipe recipe) { //Создаем новый рецепт.
-        recipeMap.getOrDefault(idRecipe, recipe);
+        recipeMap.put(idRecipe, recipe);
         return idRecipe++;
     }
 
