@@ -16,7 +16,7 @@ import java.util.TreeMap;
 public class RecipeServiceImpl implements RecipeService {
     private long idRecipe = 1L;
 
-    private static final Map<Long, Recipe> recipeMap = new TreeMap<>();
+    private final Map<Long, Recipe> recipeMap = new TreeMap<>();
 
 
     @Override
@@ -27,11 +27,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe getRecipeById(long idRecipe) { //Получаем рецепт по его id.
-        try {
             return recipeMap.get(idRecipe);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException();
-        }
     }
 
     @Override

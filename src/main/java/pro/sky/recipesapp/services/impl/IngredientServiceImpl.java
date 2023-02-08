@@ -16,7 +16,7 @@ import java.util.TreeMap;
 public class IngredientServiceImpl implements IngredientService {
     private long idIngredient = 1L;
 
-    private static final Map<Long, Ingredient> ingredientMap = new TreeMap<>();
+    private final Map<Long, Ingredient> ingredientMap = new TreeMap<>();
 
 
     @Override
