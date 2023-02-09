@@ -1,5 +1,8 @@
 package pro.sky.recipesapp.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.recipesapp.model.Ingredient;
@@ -14,6 +17,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/ingredients")
+@Tag(name = "Ингредиенты", description = "CRUD-операции и другие эндпоинты для работы с ингредиентами")
 public class IngredientController {
     private final IngredientService ingredientService;
 
@@ -21,12 +25,18 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
+    @Operation(
+            summary = "Создаем новый ингредиент."
+    )
     @PostMapping
     public ResponseEntity<Long> addNewIngredient(@RequestBody Ingredient ingredient) { //Создаем новый ингредиент.
         long id = ingredientService.addNewIngredient(ingredient);
         return ResponseEntity.ok(id);
     }
 
+    @Operation(
+            summary = "Получаем ингредиент по его id."
+    )
     @GetMapping("/{id}")
     public ResponseEntity<Ingredient> getIngredient(@PathVariable long id) { //Получаем ингредиент по его id.
         Ingredient ingredient = ingredientService.getIngredientById(id);
@@ -36,12 +46,18 @@ public class IngredientController {
         return ResponseEntity.ok(ingredient);
     }
 
+    @Operation(
+            summary = "Получаем список всех ингредиентов."
+    )
     @GetMapping
     public ResponseEntity<Collection<Ingredient>> getAllIngredients() { //Получаем список всех ингредиентов.
         Collection<Ingredient> ingredients = ingredientService.getAllIngredients();
         return ResponseEntity.ok(ingredients);
     }
 
+    @Operation(
+            summary = "Редактируем ингредиент по его id."
+    )
     @PutMapping("/{id}")
     public ResponseEntity<Ingredient> editIngredient(@PathVariable long id,
                                                      @RequestBody Ingredient ingredient) { //Редактируем ингредиент по его id.
@@ -52,6 +68,9 @@ public class IngredientController {
         return ResponseEntity.ok(ingredient);
     }
 
+    @Operation(
+            summary = "Удаляем ингредиент по его id."
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteIngredient(@PathVariable long id) { //Удаляем ингредиент по его id.
         if (ingredientService.deleteIngredient(id)) {
