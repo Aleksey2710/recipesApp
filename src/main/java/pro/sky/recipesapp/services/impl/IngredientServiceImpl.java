@@ -1,10 +1,18 @@
 package pro.sky.recipesapp.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapp.model.Ingredient;
+import pro.sky.recipesapp.model.Recipe;
+import pro.sky.recipesapp.services.FileIngredientService;
+import pro.sky.recipesapp.services.FileRecipeService;
 import pro.sky.recipesapp.services.IngredientService;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,14 +22,25 @@ import java.util.TreeMap;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
+    private final FileIngredientService fileIngredientService;
+
+    public IngredientServiceImpl(FileIngredientService fileIngredientService) {
+        this.fileIngredientService = fileIngredientService;
+    }
+
     private long idIngredient = 1L;
 
-    private final Map<Long, Ingredient> ingredientMap = new TreeMap<>();
+    private HashMap<Long, Ingredient> ingredientMap = new HashMap<>();
 
+    @PostConstruct
+    private void init() {
+        readFromFile();
+    }
 
     @Override
     public long addNewIngredient(Ingredient ingredient) { //Создаем новый ингредиент.
         ingredientMap.put(idIngredient, ingredient);
+        saveToFile();
         return idIngredient++;
     }
 
@@ -40,6 +59,7 @@ public class IngredientServiceImpl implements IngredientService {
                                      Ingredient ingredient) { //Редактируем ингредиент по его id.
         if (ingredientMap.containsKey(idIngredient)) {
             ingredientMap.put(idIngredient, ingredient);
+            saveToFile();
             return ingredient;
         }
         return null;
@@ -52,5 +72,24 @@ public class IngredientServiceImpl implements IngredientService {
             return true;
         }
         return false;
+    }
+
+    private void saveToFile() {
+        try {
+            String json = new ObjectMapper().writeValueAsString(ingredientMap);
+            fileIngredientService.saveToFile(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readFromFile() {
+        try {
+            String json = fileIngredientService.readFromFile();
+            ingredientMap = new ObjectMapper().readValue(json, new TypeReference<HashMap<Long, Ingredient>>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
