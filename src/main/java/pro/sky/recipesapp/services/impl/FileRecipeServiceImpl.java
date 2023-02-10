@@ -12,7 +12,7 @@ import java.nio.file.Path;
  * Бизнес-логика для работы с файлами (рецептов).
  */
 @Service
-public class FileRecipeRecipeServiceImpl implements FileRecipeService {
+public class FileRecipeServiceImpl implements FileRecipeService {
     @Value("${pathToDataRecipeFile}")
     private String dataFilePath;
     @Value("${nameOfDataRecipeFile}")
