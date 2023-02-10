@@ -1,5 +1,7 @@
 package pro.sky.recipesapp.services.impl;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapp.model.Recipe;
 import pro.sky.recipesapp.services.RecipeService;
@@ -27,12 +29,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe getRecipeById(long idRecipe) { //Получаем рецепт по его id.
-            return recipeMap.get(idRecipe);
+        return recipeMap.get(idRecipe);
     }
 
     @Override
     public Collection<Recipe> getAllRecipes() { //Получаем список всех рецептов.
         return recipeMap.values();
+
     }
 
     @Override

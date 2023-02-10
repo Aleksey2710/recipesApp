@@ -2,6 +2,8 @@ package pro.sky.recipesapp.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,15 @@ public class IngredientController {
     @Operation(
             summary = "Создаем новый ингредиент."
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ингредиент был добавлен"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ингредиент не добавлен"
+            )})
     @PostMapping
     public ResponseEntity<Long> addNewIngredient(@RequestBody Ingredient ingredient) { //Создаем новый ингредиент.
         long id = ingredientService.addNewIngredient(ingredient);
@@ -37,6 +48,15 @@ public class IngredientController {
     @Operation(
             summary = "Получаем ингредиент по его id."
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ингредиент был найден"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ингредиент не найден"
+            )})
     @GetMapping("/{id}")
     public ResponseEntity<Ingredient> getIngredient(@PathVariable long id) { //Получаем ингредиент по его id.
         Ingredient ingredient = ingredientService.getIngredientById(id);
@@ -49,6 +69,15 @@ public class IngredientController {
     @Operation(
             summary = "Получаем список всех ингредиентов."
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ингредиенты были найдены"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ингредиенты не найдены"
+            )})
     @GetMapping
     public ResponseEntity<Collection<Ingredient>> getAllIngredients() { //Получаем список всех ингредиентов.
         Collection<Ingredient> ingredients = ingredientService.getAllIngredients();
@@ -58,6 +87,15 @@ public class IngredientController {
     @Operation(
             summary = "Редактируем ингредиент по его id."
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ингредиент был отредактирован"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ингредиент не отредактирован"
+            )})
     @PutMapping("/{id}")
     public ResponseEntity<Ingredient> editIngredient(@PathVariable long id,
                                                      @RequestBody Ingredient ingredient) { //Редактируем ингредиент по его id.
@@ -71,6 +109,15 @@ public class IngredientController {
     @Operation(
             summary = "Удаляем ингредиент по его id."
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ингредиент был удален"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ингредиент не удален"
+            )})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteIngredient(@PathVariable long id) { //Удаляем ингредиент по его id.
         if (ingredientService.deleteIngredient(id)) {
