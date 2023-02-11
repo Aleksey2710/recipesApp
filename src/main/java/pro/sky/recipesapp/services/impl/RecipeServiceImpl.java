@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapp.model.Recipe;
-import pro.sky.recipesapp.services.FileRecipeService;
+import pro.sky.recipesapp.services.FileService;
 import pro.sky.recipesapp.services.RecipeService;
 
 import javax.annotation.PostConstruct;
@@ -18,15 +18,15 @@ import java.util.*;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
-    private final FileRecipeService fileRecipeService;
+    private final FileRecipeServiceImpl fileRecipeService;
 
-    public RecipeServiceImpl(FileRecipeService fileRecipeService) {
+    public RecipeServiceImpl(FileRecipeServiceImpl fileRecipeService) {
         this.fileRecipeService = fileRecipeService;
     }
 
     private long idRecipe = 1L;
 
-    private HashMap<Long, Recipe> recipeMap = new HashMap<>();
+    private Map<Long, Recipe> recipeMap = new HashMap<>();
 
 
     @PostConstruct
@@ -66,6 +66,7 @@ public class RecipeServiceImpl implements RecipeService {
     public boolean deleteRecipe(long idRecipe) { //Удаляем рецепт по его id.
         if (recipeMap.containsKey(idRecipe)) {
             recipeMap.remove(idRecipe);
+            saveToFile();
             return true;
         }
         return false;

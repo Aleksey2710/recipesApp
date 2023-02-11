@@ -33,10 +33,6 @@ public class RecipeController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Рецепт был добавлен"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Рецепт не был добавлен"
             )})
     @PostMapping
     public ResponseEntity<Long> addNewRecipe(@RequestBody Recipe recipe) { //Создаем новый рецепт.
@@ -72,10 +68,6 @@ public class RecipeController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Рецепты были найдены"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Рецепты не найдены"
             )})
     @GetMapping
     public ResponseEntity<Collection<Recipe>> getAllRecipes() { //Получаем список всех рецептов.

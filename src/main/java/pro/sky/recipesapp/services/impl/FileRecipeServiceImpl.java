@@ -2,7 +2,7 @@ package pro.sky.recipesapp.services.impl;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pro.sky.recipesapp.services.FileRecipeService;
+import pro.sky.recipesapp.services.FileService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +12,7 @@ import java.nio.file.Path;
  * Бизнес-логика для работы с файлами (рецептов).
  */
 @Service
-public class FileRecipeServiceImpl implements FileRecipeService {
+public class FileRecipeServiceImpl implements FileService {
     @Value("${pathToDataRecipeFile}")
     private String dataFilePath;
     @Value("${nameOfDataRecipeFile}")

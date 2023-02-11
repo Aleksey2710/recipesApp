@@ -34,10 +34,6 @@ public class IngredientController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Ингредиент был добавлен"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Ингредиент не добавлен"
             )})
     @PostMapping
     public ResponseEntity<Long> addNewIngredient(@RequestBody Ingredient ingredient) { //Создаем новый ингредиент.
@@ -73,10 +69,6 @@ public class IngredientController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Ингредиенты были найдены"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Ингредиенты не найдены"
             )})
     @GetMapping
     public ResponseEntity<Collection<Ingredient>> getAllIngredients() { //Получаем список всех ингредиентов.

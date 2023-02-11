@@ -5,16 +5,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapp.model.Ingredient;
-import pro.sky.recipesapp.model.Recipe;
-import pro.sky.recipesapp.services.FileIngredientService;
-import pro.sky.recipesapp.services.FileRecipeService;
+import pro.sky.recipesapp.services.FileService;
 import pro.sky.recipesapp.services.IngredientService;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Бизнес-логика для ингредиентов.
@@ -22,15 +19,15 @@ import java.util.TreeMap;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
-    private final FileIngredientService fileIngredientService;
+    private final FileIngredientServiceImpl fileIngredientService;
 
-    public IngredientServiceImpl(FileIngredientService fileIngredientService) {
+    public IngredientServiceImpl(FileIngredientServiceImpl fileIngredientService) {
         this.fileIngredientService = fileIngredientService;
     }
 
     private long idIngredient = 1L;
 
-    private HashMap<Long, Ingredient> ingredientMap = new HashMap<>();
+    private Map<Long, Ingredient> ingredientMap = new HashMap<>();
 
     @PostConstruct
     private void init() {
@@ -69,6 +66,7 @@ public class IngredientServiceImpl implements IngredientService {
     public boolean deleteIngredient(long idIngredient) { //Удаляем ингредиент по его id.
         if (ingredientMap.containsKey(idIngredient)) {
             ingredientMap.remove(idIngredient);
+            saveToFile();
             return true;
         }
         return false;

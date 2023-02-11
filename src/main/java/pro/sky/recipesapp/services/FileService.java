@@ -1,6 +1,6 @@
 package pro.sky.recipesapp.services;
 
-public interface FileRecipeService {
+public interface FileService {
     boolean saveToFile(String json);
 
     String readFromFile();
