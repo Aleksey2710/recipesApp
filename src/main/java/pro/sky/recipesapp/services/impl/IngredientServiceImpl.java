@@ -3,6 +3,7 @@ package pro.sky.recipesapp.services.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapp.model.Ingredient;
 import pro.sky.recipesapp.services.FileService;
@@ -11,6 +12,7 @@ import pro.sky.recipesapp.services.IngredientService;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -19,15 +21,16 @@ import java.util.Map;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
-    private final FileIngredientServiceImpl fileIngredientService;
 
-    public IngredientServiceImpl(FileIngredientServiceImpl fileIngredientService) {
-        this.fileIngredientService = fileIngredientService;
+    private final FileService fileService;
+
+    public IngredientServiceImpl(@Qualifier("fileIngredientServiceImpl") FileService fileService) {
+        this.fileService = fileService;
     }
 
     private long idIngredient = 1L;
 
-    private Map<Long, Ingredient> ingredientMap = new HashMap<>();
+    private Map<Long, Ingredient> ingredientMap = new LinkedHashMap<>();
 
     @PostConstruct
     private void init() {
@@ -75,7 +78,7 @@ public class IngredientServiceImpl implements IngredientService {
     private void saveToFile() {
         try {
             String json = new ObjectMapper().writeValueAsString(ingredientMap);
-            fileIngredientService.saveToFile(json);
+            fileService.saveToFile(json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -83,7 +86,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     private void readFromFile() {
         try {
-            String json = fileIngredientService.readFromFile();
+            String json = fileService.readFromFile();
             ingredientMap = new ObjectMapper().readValue(json, new TypeReference<HashMap<Long, Ingredient>>() {
             });
         } catch (JsonProcessingException e) {
