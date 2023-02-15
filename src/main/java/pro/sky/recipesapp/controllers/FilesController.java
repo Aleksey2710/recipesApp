@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.recipesapp.services.FileService;
-import pro.sky.recipesapp.services.impl.FileIngredientServiceImpl;
-import pro.sky.recipesapp.services.impl.FileRecipeServiceImpl;
 
 import java.io.*;
 
@@ -23,13 +21,16 @@ import java.io.*;
 @RequestMapping("/files")
 @Tag(name = "Файлы", description = "Загрузка и выгрузка файлов в формате .json")
 public class FilesController {
-    private final FileRecipeServiceImpl fileRecipeService;
-    private final FileIngredientServiceImpl fileIngredientService;
 
-    public FilesController(FileRecipeServiceImpl fileRecipeService, FileIngredientServiceImpl fileIngredientService) {
+    private final FileService fileRecipeService;
+    private final FileService fileIngredientService;
+
+    public FilesController(@Qualifier("fileRecipeServiceImpl") FileService fileRecipeService,
+                           @Qualifier("fileIngredientServiceImpl") FileService fileIngredientService) {
         this.fileRecipeService = fileRecipeService;
         this.fileIngredientService = fileIngredientService;
     }
+
 
     @GetMapping(value = "/export", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
@@ -74,15 +75,13 @@ public class FilesController {
             )})
     public ResponseEntity<Void> upLoadDataRecipeFile(@RequestParam MultipartFile file) { //Генерация файла, загрузка
         fileRecipeService.cleanDataFile(); //Удаляем dataRecipe, создаем новый
-        File dataFile = fileRecipeService.getDataFile(); //Берем про него информацию
-
-        try (FileOutputStream fos = new FileOutputStream(dataFile)) { //Открываем исходящий поток
-            IOUtils.copy(file.getInputStream(), fos); //Копируем входящий поток из запроса и копируем в исходящий поток
+        try {
+            fileRecipeService.upLoadDataRecipeFile(file);
             return ResponseEntity.ok().build();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
     @PostMapping(value = "/import/ingredient", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
@@ -99,14 +98,12 @@ public class FilesController {
             )})
     public ResponseEntity<Void> upLoadDataIngredientFile(@RequestParam MultipartFile file) { //Генерация файла, загрузка
         fileIngredientService.cleanDataFile(); //Удаляем dataIngredient, создаем новый
-        File dataFile = fileIngredientService.getDataFile(); //Берем про него информацию
-
-        try (FileOutputStream fos = new FileOutputStream(dataFile)) { //Открываем исходящий поток
-            IOUtils.copy(file.getInputStream(), fos); //Копируем входящий поток из запроса и копируем в исходящий поток
+        try {
+            fileIngredientService.upLoadDataRecipeFile(file);
             return ResponseEntity.ok().build();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

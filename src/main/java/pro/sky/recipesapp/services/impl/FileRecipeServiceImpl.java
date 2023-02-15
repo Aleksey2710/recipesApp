@@ -1,11 +1,12 @@
 package pro.sky.recipesapp.services.impl;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pro.sky.recipesapp.services.FileService;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -50,6 +51,7 @@ public class FileRecipeServiceImpl implements FileService {
             return "Не удалось прочитать файл!";
         }
     }
+
     @Override
     public boolean cleanDataFile() {
         try {
@@ -62,17 +64,27 @@ public class FileRecipeServiceImpl implements FileService {
             return false;
         }
     }
+
     @Override
     public File getDataFile() {
         return new File(dataFilePath + "/" + dataFileName);
     }
 
     @Override
+    public void upLoadDataRecipeFile(MultipartFile file) {
+        try (FileOutputStream fos = new FileOutputStream(getDataFile())) { //Открываем исходящий поток
+            IOUtils.copy(file.getInputStream(), fos); //Копируем входящий поток из запроса и копируем в исходящий поток
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Path createTempFile(String suffix) {
         try {
             return Files.createTempFile(Path.of(dataFilePath), "tempFile", suffix);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;
         }
     }
 }
