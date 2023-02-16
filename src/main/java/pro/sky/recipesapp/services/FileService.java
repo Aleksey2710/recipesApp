@@ -15,4 +15,6 @@ public interface FileService {
     File getDataFile();
 
     void upLoadDataRecipeFile(MultipartFile file);
+
+    Path createTempFile(String suffix);
 }

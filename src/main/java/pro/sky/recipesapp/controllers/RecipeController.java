@@ -5,11 +5,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.recipesapp.model.Recipe;
 import pro.sky.recipesapp.services.RecipeService;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Collection;
 
 /**
@@ -115,5 +124,25 @@ public class RecipeController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+    @GetMapping("/getAllRecipe")
+    public ResponseEntity<Object> getAllRecipesPrint() {
+        try {
+            Path path = recipeService.createAllRecipes();
+            if (Files.size(path) == 0) { //Если файл пустой
+                return ResponseEntity.noContent().build(); //Статус 204
+            }
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(path.toFile())); //Берем у файла входной поток, заворачиваем его в ресурс
+            return ResponseEntity.ok() //Формируем и возвращаем HTTP ответ
+                    .contentType(MediaType.TEXT_PLAIN) //Задаем тип файла
+                    .contentLength(Files.size(path)) //Узнаем длину файла
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + LocalDateTime.now() + "-report.txt\"") //Задаем название файла
+                    .body(resource);
+
+        } catch (IOException e) { //При исключении отправляем код...
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(e.toString());// код 500
+        }
     }
 }

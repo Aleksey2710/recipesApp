@@ -3,7 +3,6 @@ package pro.sky.recipesapp.services.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapp.model.Recipe;
@@ -11,6 +10,11 @@ import pro.sky.recipesapp.services.FileService;
 import pro.sky.recipesapp.services.RecipeService;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 /**
@@ -33,7 +37,11 @@ public class RecipeServiceImpl implements RecipeService {
 
     @PostConstruct
     private void init() {
-        readFromFile();
+        try {
+            readFromFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -91,5 +99,22 @@ public class RecipeServiceImpl implements RecipeService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public Path createAllRecipes() throws IOException {
+
+        Path path = fileService.createTempFile("allRecipes");
+        for (Recipe recipe : recipeMap.values()) {
+            try (Writer writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+                writer.append(recipe.getNameRecipe() + "\n"
+                        + "Время приготовления: " + recipe.getCookingTime() + " " + recipe.getTimeMeasurement()+"\n"
+                        + "Ингредиенты: \n"
+                        + recipe.getIngredients().toString()+ "\n"
+                        + "Инструкция приготовления: \n"
+                        + recipe.getSteps().toString());
+                writer.append("\n");
+            }
+        }
+        return path;
     }
 }
