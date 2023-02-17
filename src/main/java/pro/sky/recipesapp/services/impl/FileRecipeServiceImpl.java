@@ -10,6 +10,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
 /**
  * Бизнес-логика для работы с файлами (рецептов).
  */
@@ -72,12 +74,24 @@ public class FileRecipeServiceImpl implements FileService {
     }
 
     @Override
-    public void upLoadDataRecipeFile(MultipartFile file) {
-        try (FileOutputStream fos = new FileOutputStream(getDataFile())) { //Открываем исходящий поток
-            IOUtils.copy(file.getInputStream(), fos); //Копируем входящий поток из запроса и копируем в исходящий поток
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void upLoadDataRecipeFile(MultipartFile file) throws IOException {
+        Path filePath = Path.of(dataFilePath,file.getOriginalFilename());
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+
+        try (
+                InputStream is = file.getInputStream();
+                OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+                BufferedInputStream bis = new BufferedInputStream(is, 1024);
+                BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
+            bis.transferTo(bos);
         }
+//        try (FileOutputStream fos = new FileOutputStream(getDataFile())) { //Открываем исходящий поток
+//            IOUtils.copy(file.getInputStream(), fos); //Копируем входящий поток из запроса и копируем в исходящий поток
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 @Override
     public Path createTempFile(String suffix) {

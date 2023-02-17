@@ -3,6 +3,7 @@ package pro.sky.recipesapp.services;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
 public interface FileService {
@@ -14,7 +15,7 @@ public interface FileService {
 
     File getDataFile();
 
-    void upLoadDataRecipeFile(MultipartFile file);
+    void upLoadDataRecipeFile(MultipartFile file) throws IOException;
 
     Path createTempFile(String suffix);
 }

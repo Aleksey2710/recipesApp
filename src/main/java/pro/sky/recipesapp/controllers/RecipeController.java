@@ -125,8 +125,12 @@ public class RecipeController {
         }
         return ResponseEntity.notFound().build();
     }
-    @GetMapping("/getAllRecipe")
+    @Operation(
+            summary = "Загружаем список рецептов в формате txt"
+    )
+    @GetMapping(value = "/getAllRecipe")
     public ResponseEntity<Object> getAllRecipesPrint() {
+
         try {
             Path path = recipeService.createAllRecipes();
             if (Files.size(path) == 0) { //Если файл пустой
