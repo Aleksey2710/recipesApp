@@ -51,7 +51,7 @@ public class FileRecipeServiceImpl implements FileService {
             return Files.readString(Path.of(dataFilePath, dataFileName));
         } catch (IOException e) {
             e.printStackTrace();
-            return "Не удалось прочитать файл!";
+            return "{}";
         }
     }
 

@@ -106,32 +106,34 @@ public class RecipeServiceImpl implements RecipeService {
     public Path createAllRecipes() throws IOException {
 
         Path path = fileService.createTempFile("allRecipes");
-        Writer writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND);
-        String symbol = " - ";
+        try (Writer writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+            String symbol = " - ";
 
-        for (Recipe recipe : recipeMap.values()) {
+            for (Recipe recipe : recipeMap.values()) {
 
-            writer.append("\n").append(recipe.getNameRecipe()).append("\n");
+                writer.append("\n").append(recipe.getNameRecipe()).append("\n");
 
-            writer.append("\n Время приготовления: " + recipe.getCookingTime()
-                    + " " + recipe.getTimeMeasurement());
+                writer.append("\n Время приготовления: " + recipe.getCookingTime()
+                        + " " + recipe.getTimeMeasurement());
 
-            writer.append("\n Ингредиенты: \n");
+                writer.append("\n Ингредиенты: \n");
 
-            for (Ingredient ingredient : recipe.getIngredients()) {
-                writer.append(symbol).append(ingredient.getNameIngredient() +" "
-                        + ingredient.getCountIngredients()
-                        + ingredient.getCountMeasurement()+"\n");
+                for (Ingredient ingredient : recipe.getIngredients()) {
+                    writer.append(symbol).append(ingredient.getNameIngredient() + " "
+                            + ingredient.getCountIngredients()
+                            + ingredient.getCountMeasurement() + "\n");
+                }
+
+                writer.append("\n Инструкция приготовления: \n");
+
+                for (String step : recipe.getSteps()) {
+                    writer.append(symbol).append(step).append("\n");
+                }
+
+                writer.append("\n");
             }
-
-            writer.append("\n Инструкция приготовления: \n");
-
-            for (String step : recipe.getSteps()) {
-                writer.append(symbol).append(step).append("\n");
-            }
-
-            writer.append("\n");
         }
         return path;
     }
+
 }
